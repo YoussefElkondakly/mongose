@@ -24,7 +24,6 @@ class ApiFeatures {
       if (this.queryObj.sort) {
         //price,ratingsAverage
         const sortBy = splitJoiner(this.queryObj.sort);
-        console.log(sortBy);
         this.query = this.query.sort(sortBy);
   
         /*query=query.sort(req.query.sort)*/

@@ -65,8 +65,9 @@ exports.updateTour = catchAsync(async function (req, res, next) {
   });
 });
 exports.deleteTour = catchAsync(async function (req, res, next) {
-  await Tour.findByIdAndDelete(req.params.id);
-  res.status(204).json({
+ const deleting= await Tour.findByIdAndDelete(req.params.id)
+ if(!deleting)return next(new AppError("The Provideied Id Is Not Valid",404))   
+ res.status(204).json({
     status: "success",
     data: null,
   });

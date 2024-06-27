@@ -1,6 +1,7 @@
-const AppError = require("../myPublicClasses/AppError");
+const AppError = require("./../myPublicClasses/AppError");
+
 const handelCastErr = (err) => {
-  console.log(err);
+  // console.log(err);
   const message = `Invalid ${err.path} : ${err.value}`;
   return new AppError(message, 400);
 };
@@ -21,6 +22,14 @@ const handelValidateErr = (err) => {
 
   return new AppError(message, 400);
 };
+const handelJWTError=(err)=>{
+const message="You are not Authenticated"
+return new AppError(message,401)
+}
+const handelJWTExpiredError=(err)=>{
+  const message="Your Login session has expired. Log in again"
+  return new AppError(message,401)
+}
 const sendProdError = function (res, err) {
   if (err.isOperational) {
     return res.status(err.statusCode).json({
@@ -65,6 +74,9 @@ module.exports = (err, req, res, next) => {
     if (err.name === "CastError") e = handelCastErr(err);
     else if (err.code === 11000) e = handelDuplicateErr(err);
     else if (err.name === "ValidationError") e = handelValidateErr(err);
+//"message": "invalid signature"
+    else if (err.name === "JsonWebTokenError") e = handelJWTError(err)
+      else if (err.name === "TokenExpiredError") e = handelJWTExpiredError(err)
     sendProdError(res, e);
   }
   // console.log(err.stack)

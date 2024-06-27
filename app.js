@@ -1,3 +1,4 @@
+process.on('uncaughtException',(e)=>console.error("A7a "+e.message))
 const express=require('express');
 const tourRouter=require('./routes/tourRouter')
 const userRouter=require('./routes/userRouter')
