@@ -8,3 +8,5 @@ Error.captureStackTrace(this,this.constructor)
     }
 }
 module.exports=AppError
+
+//to check if we handeld the error it sets to true If We Won't handel it so we did not make an instance of that class by 

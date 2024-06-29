@@ -30,6 +30,8 @@ const handelJWTExpiredError=(err)=>{
   const message="Your Login session has expired. Log in again"
   return new AppError(message,401)
 }
+
+
 const sendProdError = function (res, err) {
   if (err.isOperational) {
     return res.status(err.statusCode).json({
@@ -37,6 +39,7 @@ const sendProdError = function (res, err) {
       message: err.message,
     });
   } else {
+    //if is Opretional=== undefinde meaning its not Handeld by the AppError We Made so its UnHandeld error 
     console.error("Error", err);
     return res.status(500).json({
       status: "Internal Server Error",
@@ -64,20 +67,32 @@ module.exports = (err, req, res, next) => {
   /**
    *
    */
+  //FIXME for testing without closing the server
+  if( req.headers.test==='test'){
+process.env.NODE_ENV = "production"
+  }
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "fail";
+// console.log("1",err.message)
 
   if (process.env.NODE_ENV === "development") {
     sendDevError(res, err);
+    
   } else if (process.env.NODE_ENV === "production") {
-    let e = { ...err };
+    // console.log("2",err)
+    let e = { message:err.message,...err };
     if (err.name === "CastError") e = handelCastErr(err);
     else if (err.code === 11000) e = handelDuplicateErr(err);
     else if (err.name === "ValidationError") e = handelValidateErr(err);
 //"message": "invalid signature"
     else if (err.name === "JsonWebTokenError") e = handelJWTError(err)
       else if (err.name === "TokenExpiredError") e = handelJWTExpiredError(err)
+    // console.log("3",err)
+  // console.log("4",e)
     sendProdError(res, e);
+  //FIXMEfor testing without closing the server
+ req.headers.test==='test'?process.env.NODE_ENV = "development":null
+
   }
   // console.log(err.stack)
 };
