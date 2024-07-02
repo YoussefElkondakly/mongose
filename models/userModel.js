@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema({
       validator: function (element) {
         return element === this.password;
       },
-      message: "Incorrect",
+      message: "Incorrect Password Confirmation",
     },
   },
   passwordChangedAt: Date,
@@ -58,6 +58,7 @@ userSchema.methods.correctPassword = async function (
 };
 userSchema.methods.changedUserAfter = function (JWTimeStamp) {
   if (this.passwordChangedAt) {
+    //compare if session<change returns login again in protect 
     const changedTimeStamp = this.passwordChangedAt.getTime() / 1000;
     return JWTimeStamp < changedTimeStamp;
   }
@@ -79,6 +80,8 @@ userSchema.pre(/^find/,function(next){
 this.find({active:{$ne:false}})
   next()
 }) 
+
+
 userSchema.pre('save',function(next){
     if(!this.isModified('password')||this.isNew) return next();
     this.passwordChangedAt = Date.now()-1000;

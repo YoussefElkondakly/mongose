@@ -16,6 +16,7 @@ class ApiFeatures {
         /\b(gt|gte|lt|lte)\b/g,
         (m) => `$${m}`
       );
+      console.log(queryFilterdObj)
       //this.query=Tour.find()
       this.query = this.query.find(JSON.parse(queryFilterdObj));
       return this;

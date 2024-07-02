@@ -5,7 +5,7 @@ const pass=process.env.DB_PASSWORD
 const DB=process.env.DB_CONNECT.replace("<PASSWORD>",pass)
 const LocDB=process.env.DB_LOCAL
 const port=process.env.PORT || 3000
-mongoose.connect(DB).then(co=>{console.log("Connected Successfully to "+co.connections[0].name+" Database")
+mongoose.connect(LocDB).then(co=>{console.log("Connected Successfully to "+co.connections[0].name+" Database")
     app.listen(port,()=>{
         console.log("Server Starts ON Port "+port)
         // console.log(process.env.NODE_ENV)
