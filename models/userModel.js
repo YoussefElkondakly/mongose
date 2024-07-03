@@ -56,6 +56,7 @@ userSchema.methods.correctPassword = async function (
 ) {
   return await bcrypt.compare(givenPassword, userPassword);
 };
+
 userSchema.methods.changedUserAfter = function (JWTimeStamp) {
   if (this.passwordChangedAt) {
     //compare if session<change returns login again in protect 
